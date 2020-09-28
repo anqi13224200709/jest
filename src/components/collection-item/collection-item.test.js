@@ -1,7 +1,9 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import  { shallow } from 'enzyme';
 
-import { CollectionItem } from './collection-item.component';
+import  CollectionItem   from './collection-item.component';
+
+import CustomButton from '../custom-button/custom-button.component'
 
 describe('CollectionItem component', () => {
   let wrapper;
@@ -21,30 +23,33 @@ describe('CollectionItem component', () => {
       },
       addItem: mockAddItem
     };
-
-    wrapper = shallow(<CollectionItem {...mockProps} />);
+    
+    const Coll = CollectionItem.WrappedComponent;
+    wrapper = shallow(<Coll  {...mockProps}/>);
   });
 
   it('should render CollectionItem component', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
+
+
   it('should call addItem when AddButton clicked', () => {
-    wrapper.find('AddButton').simulate('click');
+    wrapper.find(CustomButton).simulate('click');
 
     expect(mockAddItem).toHaveBeenCalled();
   });
 
   it('should render imageUrl as a prop on BackgroundImage', () => {
-    expect(wrapper.find('BackgroundImage').prop('imageUrl')).toBe(imageUrl);
+    expect(wrapper.find({style: {backgroundImage: `url(${imageUrl})`}}).exists()).toBe(true);
   });
 
   it('should render name prop in NameContainer', () => {
-    expect(wrapper.find('NameContainer').text()).toBe(mockName);
+    expect(wrapper.find('.name').text()).toBe(mockName);
   });
 
   it('should render price prop in PriceContainer', () => {
-    const price = parseInt(wrapper.find('PriceContainer').text());
+    const price = parseInt(wrapper.find('.price').text());
     expect(price).toBe(mockPrice);
   });
 });
